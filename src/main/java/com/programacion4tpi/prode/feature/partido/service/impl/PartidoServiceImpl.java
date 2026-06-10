@@ -2,6 +2,8 @@ package com.programacion4tpi.prode.feature.partido.service.impl;
 
 import com.programacion4tpi.prode.feature.equipo.models.Equipo;
 import com.programacion4tpi.prode.feature.equipo.repository.EquipoRepository;
+import com.programacion4tpi.prode.feature.fecha.models.Fecha;
+import com.programacion4tpi.prode.feature.fecha.repository.FechaRepository;
 import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoUpdateRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.response.PartidoResponseDto;

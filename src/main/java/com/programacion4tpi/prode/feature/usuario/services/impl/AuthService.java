@@ -2,13 +2,14 @@ package com.programacion4tpi.prode.feature.usuario.services.impl;
 
 import com.programacion4tpi.prode.config.jwt.JwtProperties;
 import com.programacion4tpi.prode.config.jwt.JwtService;
+import com.programacion4tpi.prode.exceptions.jwt.InvalidCredentialsException;
+import com.programacion4tpi.prode.exceptions.jwt.UserAlreadyExistsException;
 import com.programacion4tpi.prode.feature.usuario.dtos.request.*;
 import com.programacion4tpi.prode.feature.usuario.dtos.response.AuthResponseDto;
 import com.programacion4tpi.prode.feature.usuario.dtos.response.RefreshResponseDto;
 import com.programacion4tpi.prode.feature.usuario.models.*;
 import com.programacion4tpi.prode.feature.usuario.models.enums.Rol;
 import com.programacion4tpi.prode.feature.usuario.repository.UsuarioRepository;
-import com.programacion4tpi.prode.feature.usuario.services.domain.AuthService;
 import com.programacion4tpi.prode.feature.usuario.services.domain.interfaces.IAuthService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,6 @@ import java.util.List;
 public class AuthService implements IAuthService {
 
     private static final String TOKEN_TYPE_BEARER = "Bearer";
-
     private final UsuarioRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -35,14 +35,11 @@ public class AuthService implements IAuthService {
     private final JwtProperties jwtProperties;
 
 
-    /**
-     * Registro: rechaza username duplicado, codifica la contraseña y guarda el usuario con rol por defecto.
-     */
     @Transactional
     @Override
     public void register(RegisterRequestDto request) {
         if (userRepository.existsByUsername(request.username())) {
-            throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistsException("El usuario existe");
         }
 
         Usuario user = Usuario.builder()
@@ -53,10 +50,6 @@ public class AuthService implements IAuthService {
         userRepository.save(user);
     }
 
-    /**
-     * Login: el {@link AuthenticationManager} valida credenciales; si son correctas se emite un JWT con los
-     * mismos nombres de rol que {@link UserDetails#getAuthorities()}.
-     */
 
     @Override
     public AuthResponseDto login(LoginRequestDto request) {
@@ -71,6 +64,7 @@ public class AuthService implements IAuthService {
             UserDetails principal = (UserDetails) authentication.getPrincipal();
 
             // Obtener los roles del usuario
+            assert principal != null;
             var roles = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
             // Generar el token JWT
@@ -82,18 +76,18 @@ public class AuthService implements IAuthService {
 
             // Si las credenciales son inválidas, se lanza una excepción de tipo InvalidCredentialsException
         } catch (BadCredentialsException e) {
-            throw new InvalidCredentialsException();
+            throw new InvalidCredentialsException("Credenciales invalidas");
         }
     }
 
     public RefreshResponseDto refresh(RefreshRequestDto request) {
         Claims claims = jwtService.parseValidClaims(request.refreshToken())	// obtiene token del cliente y lo parsea para ver validez
-                .orElseThrow(InvalidCredentialsException::new);	// void en caso de error (401)
+                .orElseThrow(() -> new InvalidCredentialsException("Credenciales inválidas"));	// void en caso de error (401)
 
         String username = claims.getSubject();
 
         Usuario user = userRepository.findByUsername(username)	// validación contra DB (usuario eliminado)
-                .orElseThrow(InvalidCredentialsException::new);
+                .orElseThrow(() -> new InvalidCredentialsException("Credenciales inválidas"));
 
         var roles = List.of(user.getRol().name());	// rol
 

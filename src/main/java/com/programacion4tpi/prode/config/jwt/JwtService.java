@@ -4,10 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -17,12 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class JwtService {
 
     private static final int MIN_SECRET_BYTES = 32;
     private final JwtProperties properties;
     private SecretKey signingKey;
+
+    public JwtService(JwtProperties properties) {
+        this.properties = properties;
+    }
 
     @PostConstruct
     void initSigningKey() {	// ejecución única, al levantar app
