@@ -6,23 +6,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "pronostico", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"usuario_id", "partido_id"})
-})
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(
+        name = "pronostico",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "partido_id"})
+)
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Pronostico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // guardo ID u obj completo??
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id")
