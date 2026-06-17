@@ -17,6 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 
 @Service
 @AllArgsConstructor
@@ -40,6 +43,14 @@ public class PronosticoPostService implements IPronosticoPostService {
         String email = authentication.getName();
         Usuario usuario = validateUser.validateUserByEmail(email);
         Partido partido = validatePartido.validatePartidoById(dto.partidoId());
+
+        Instant ahora = Instant.now();
+
+        if (!ahora.isBefore(partido.getFechaHoraInicio().minus(30, ChronoUnit.MINUTES))) {
+            throw new BadRequestException(
+                    "No se pueden realizar pronósticos cuando faltan menos de 30 minutos para el partido"
+            );
+        }
 
         if (repository.existsByUsuarioIdAndPartidoId(usuario.getId(), dto.partidoId())) {
             throw new BadRequestException("Ya existe un pronóstico para este partido");
