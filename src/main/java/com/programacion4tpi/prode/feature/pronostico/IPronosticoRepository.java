@@ -6,6 +6,7 @@ import java.util.Optional;
 
 
 public interface IPronosticoRepository extends JpaRepository<Pronostico, Long> {
-    public boolean existsByUsuarioIdAndPartidoId(Long usuarioId, Long partidoId);
+    boolean existsByUsuarioIdAndPartidoId(Long usuarioId, Long partidoId);
+    Optional<Pronostico> findByUsuarioIdAndPartidoId(Long usuarioId, Long partidoId);
 
 }

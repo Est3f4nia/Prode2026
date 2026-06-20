@@ -1,7 +1,7 @@
 package com.programacion4tpi.prode.feature.pronostico.controllers;
 
 import com.programacion4tpi.prode.config.BaseResponse;
-import com.programacion4tpi.prode.feature.pronostico.dtos.req.PronosticoRequestDto;
+import com.programacion4tpi.prode.feature.pronostico.dtos.req.PronosticoCreateRequestDto;
 import com.programacion4tpi.prode.feature.pronostico.dtos.resp.PronosticoResponseDto;
 import com.programacion4tpi.prode.feature.pronostico.services.interfaces.IPronosticoPostService;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class PronosticoPostController {
 
     @PostMapping
     public ResponseEntity<BaseResponse<PronosticoResponseDto>> crearPronostico(
-            @Valid @RequestBody PronosticoRequestDto dto
+            @Valid @RequestBody PronosticoCreateRequestDto dto
     ) {
 
         PronosticoResponseDto pronostico = pronosticoPostService.create(dto);
