@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/pronostico")
+@RequestMapping("/api/pronosticos")
 @AllArgsConstructor
 public class PronosticoPostController {
 

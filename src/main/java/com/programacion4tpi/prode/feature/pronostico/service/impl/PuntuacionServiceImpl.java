@@ -1,4 +1,3 @@
-// feature/pronostico/service/impl/PuntuacionServiceImpl.java
 package com.programacion4tpi.prode.feature.pronostico.service.impl;
 
 import com.programacion4tpi.prode.feature.partido.models.Partido;
@@ -29,14 +28,13 @@ public class PuntuacionServiceImpl implements PuntuacionService {
             int puntos = calcularPuntos(
                     partido.getGolesLocal(),
                     partido.getGolesVisitante(),
-                    pronostico.getGolesLocalPronosticado(),
-                    pronostico.getGolesVisitantePronosticado(),
+                    pronostico.getGolesLocalPredicho(),
+                    pronostico.getGolesVisitantePredicho(),
                     resultadoReal
             );
-            pronostico.setPuntosObtenidos(puntos);
+            pronostico.setPuntosOtorgados(puntos);
             pronosticoRepository.save(pronostico);
 
-            // Acumular en el usuario
             Usuario usuario = pronostico.getUsuario();
             usuario.setPuntosTotales(usuario.getPuntosTotales() + puntos);
             if (puntos == 3) {
@@ -51,12 +49,10 @@ public class PuntuacionServiceImpl implements PuntuacionService {
                        int golesLocalProno, int golesVisitanteProno,
                        ResultadoPartido resultadoReal) {
 
-        // Pleno: marcador exacto
         if (golesLocalProno == golesLocalReal && golesVisitanteProno == golesVisitanteReal) {
             return 3;
         }
 
-        // Tendencia: el pronostico acertó el ganador/empate
         ResultadoPartido tendenciaProno = derivarResultado(golesLocalProno, golesVisitanteProno);
         if (tendenciaProno == resultadoReal) {
             return 1;
