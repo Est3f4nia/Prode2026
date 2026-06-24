@@ -1,6 +1,6 @@
 package com.programacion4tpi.prode.feature.equipo.controllers.delete;
 
-import com.programacion4tpi.prode.feature.equipo.service.domain.EquipoService;
+import com.programacion4tpi.prode.feature.equipo.services.interfaces.EquipoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

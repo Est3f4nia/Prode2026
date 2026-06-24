@@ -1,6 +1,6 @@
 package com.programacion4tpi.prode.feature.partido.mappers;
 
-import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoRequestDto;
+import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoCreateRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.response.PartidoResponseDto;
 import com.programacion4tpi.prode.feature.equipo.models.Equipo;
 import com.programacion4tpi.prode.feature.fecha.models.Fecha;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PartidoMapper {
 
-    public Partido toEntity(PartidoRequestDto dto, Fecha fecha, Equipo local, Equipo visitante) {
+    public Partido toEntity(PartidoCreateRequestDto dto, Fecha fecha, Equipo local, Equipo visitante) {
         return Partido.builder()
                 .fecha(fecha)
                 .equipoLocal(local)

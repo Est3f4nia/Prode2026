@@ -10,8 +10,4 @@ public class UserAlreadyExistsException extends CustomException {
     public UserAlreadyExistsException(String message) {
         super(message, HttpStatus.CONFLICT, null, URI.create("/errors/conflict"), null);
     }
-
-    public UserAlreadyExistsException(String message, List<String> errors) {
-        super(message, HttpStatus.CONFLICT, errors, URI.create("/errors/conflict"), null);
-    }
 }

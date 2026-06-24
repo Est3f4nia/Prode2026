@@ -1,14 +1,13 @@
 package com.programacion4tpi.prode.feature.equipo.controllers.get;
 
 import com.programacion4tpi.prode.feature.equipo.dtos.response.EquipoResponseDto;
-import com.programacion4tpi.prode.feature.equipo.service.domain.EquipoService;
-import jakarta.annotation.security.PermitAll;
+import com.programacion4tpi.prode.feature.equipo.services.interfaces.EquipoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/equipos")
@@ -18,7 +17,6 @@ public class EquipoGetController {
     private final EquipoService equipoService;
 
     @GetMapping
-    @PermitAll
     public ResponseEntity<List<EquipoResponseDto>> listarEquipos() {
         return ResponseEntity.ok(equipoService.listarEquipos());
     }

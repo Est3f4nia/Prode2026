@@ -9,10 +9,10 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
                         .body(problem);
     }
 
+    // Acceso a endpoints admin por parte de usuarios con privilegios básicos
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAuthorizationDenied(
             AuthorizationDeniedException ex,

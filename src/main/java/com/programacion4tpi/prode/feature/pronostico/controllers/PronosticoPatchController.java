@@ -1,9 +1,9 @@
 package com.programacion4tpi.prode.feature.pronostico.controllers;
 
 import com.programacion4tpi.prode.config.BaseResponse;
-import com.programacion4tpi.prode.feature.pronostico.dtos.req.PronosticoModifyRequestDto;
-import com.programacion4tpi.prode.feature.pronostico.dtos.resp.PronosticoResponseDto;
-import com.programacion4tpi.prode.feature.pronostico.services.interfaces.IPronosticoModifyService;
+import com.programacion4tpi.prode.feature.pronostico.dtos.request.PronosticoModifyRequestDto;
+import com.programacion4tpi.prode.feature.pronostico.dtos.response.PronosticoResponseDto;
+import com.programacion4tpi.prode.feature.pronostico.services.impl.interfaces.IPronosticoModifyService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

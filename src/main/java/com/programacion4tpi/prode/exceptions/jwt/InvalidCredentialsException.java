@@ -11,8 +11,4 @@ public class InvalidCredentialsException extends CustomException {
     public InvalidCredentialsException(String message) {
         super(message, HttpStatus.UNAUTHORIZED, null, URI.create("/errors/unauthorized"), null);
     }
-
-    public InvalidCredentialsException(String message, List<String> errors) {
-        super(message, HttpStatus.UNAUTHORIZED, errors, URI.create("/errors/unauthorized"), null);
-    }
 }

@@ -1,7 +1,7 @@
 package com.programacion4tpi.prode.feature.pronostico.controllers;
 
-import com.programacion4tpi.prode.feature.pronostico.dtos.resp.PronosticoResponseDto;
-import com.programacion4tpi.prode.feature.pronostico.services.interfaces.IPronosticoGetService;
+import com.programacion4tpi.prode.feature.pronostico.dtos.response.PronosticoResponseDto;
+import com.programacion4tpi.prode.feature.pronostico.services.impl.interfaces.IPronosticoGetService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

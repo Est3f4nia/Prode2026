@@ -1,8 +1,8 @@
 package com.programacion4tpi.prode.feature.equipo.controllers.post;
 
-import com.programacion4tpi.prode.feature.equipo.dtos.request.EquipoRequestDto;
+import com.programacion4tpi.prode.feature.equipo.dtos.request.EquipoCreateRequestDto;
 import com.programacion4tpi.prode.feature.equipo.dtos.response.EquipoResponseDto;
-import com.programacion4tpi.prode.feature.equipo.service.domain.EquipoService;
+import com.programacion4tpi.prode.feature.equipo.services.interfaces.EquipoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class EquipoPostController {
 
     @PostMapping
     public ResponseEntity<EquipoResponseDto> crearEquipo(
-            @Valid @RequestBody EquipoRequestDto requestDto) {
+            @Valid @RequestBody EquipoCreateRequestDto requestDto) {
         EquipoResponseDto response = equipoService.crearEquipo(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

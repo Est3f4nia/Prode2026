@@ -2,7 +2,7 @@ package com.programacion4tpi.prode.feature.partido.controllers.patch;
 
 import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoUpdateRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.response.PartidoResponseDto;
-import com.programacion4tpi.prode.feature.partido.service.impl.PartidoService;
+import com.programacion4tpi.prode.feature.partido.services.impl.intefaces.PartidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

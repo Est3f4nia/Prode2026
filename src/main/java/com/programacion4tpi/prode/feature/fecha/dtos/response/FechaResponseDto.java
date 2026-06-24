@@ -1,6 +1,6 @@
 package com.programacion4tpi.prode.feature.fecha.dtos.response;
 
-import com.programacion4tpi.prode.feature.fecha.models.EstadoFecha;
+import com.programacion4tpi.prode.feature.fecha.models.enums.EstadoFecha;
 
 public class FechaResponseDto {
 

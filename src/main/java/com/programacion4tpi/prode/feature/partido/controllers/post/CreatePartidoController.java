@@ -1,8 +1,8 @@
 package com.programacion4tpi.prode.feature.partido.controllers.post;
 
-import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoRequestDto;
+import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoCreateRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.response.PartidoResponseDto;
-import com.programacion4tpi.prode.feature.partido.service.impl.PartidoService;
+import com.programacion4tpi.prode.feature.partido.services.impl.intefaces.PartidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CreatePartidoController {
     private final PartidoService partidoService;
 
     @PostMapping
-    public ResponseEntity<PartidoResponseDto> create(@Valid @RequestBody PartidoRequestDto dto) {
+    public ResponseEntity<PartidoResponseDto> create(@Valid @RequestBody PartidoCreateRequestDto dto) {
         PartidoResponseDto response = partidoService.create(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

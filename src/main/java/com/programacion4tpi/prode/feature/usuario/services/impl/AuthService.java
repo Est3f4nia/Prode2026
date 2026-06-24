@@ -12,7 +12,7 @@ import com.programacion4tpi.prode.feature.usuario.models.enums.Rol;
 import com.programacion4tpi.prode.feature.usuario.repository.UsuarioRepository;
 import com.programacion4tpi.prode.feature.usuario.services.impl.interfaces.IAuthService;
 import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,12 +20,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthService implements IAuthService {
 
     private static final String TOKEN_TYPE_BEARER = "Bearer";
@@ -34,7 +33,6 @@ public class AuthService implements IAuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final JwtProperties jwtProperties;
-
 
     @Transactional
     @Override
@@ -51,9 +49,12 @@ public class AuthService implements IAuthService {
                 .build();
         userRepository.save(user);
     }
+
     @Override
     public AuthResponseDto login(LoginRequestDto request) {
+
         try {
+
             Authentication authentication = authenticationManager.authenticate(
                     UsernamePasswordAuthenticationToken.unauthenticated(request.email(), request.password())
             );
@@ -67,7 +68,6 @@ public class AuthService implements IAuthService {
             String accessToken = jwtService.generateToken(principal.getUsername(), roles);
             String refreshToken = jwtService.generateRefreshToken(principal.getUsername());
 
-            // Cast seguro: UserDetailsServiceImpl siempre devuelve Usuario
             Usuario usuario = (Usuario) principal;
 
             return new AuthResponseDto(
@@ -75,8 +75,8 @@ public class AuthService implements IAuthService {
                     refreshToken,
                     TOKEN_TYPE_BEARER,
                     jwtProperties.expirationMs(),
-                    usuario.getEmail(),           // ← email del usuario
-                    usuario.getRol().name()       // ← "ADMIN" o "JUGADOR" (sin prefijo ROLE_)
+                    usuario.getEmail(),
+                    usuario.getRol().name()
             );
 
         } catch (BadCredentialsException e) {
@@ -84,6 +84,7 @@ public class AuthService implements IAuthService {
         }
     }
 
+    @Override
     public RefreshResponseDto refresh(RefreshRequestDto request) {
         Claims claims = jwtService.parseValidClaims(request.refreshToken())
                 .orElseThrow(() -> new InvalidCredentialsException("Credenciales inválidas"));

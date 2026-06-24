@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/auth/refresh").permitAll()
 
-                        // Protegidos
+                        // Privados
                         .requestMatchers("/api/equipos/**").authenticated()
                         .requestMatchers("/api/partidos/**").authenticated()
                         .requestMatchers("/api/pronosticos/**").authenticated()

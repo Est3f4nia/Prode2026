@@ -1,5 +1,6 @@
 package com.programacion4tpi.prode.feature.fecha.models;
 
+import com.programacion4tpi.prode.feature.fecha.models.enums.EstadoFecha;
 import jakarta.persistence.*;
 
 // linkear partidos?
