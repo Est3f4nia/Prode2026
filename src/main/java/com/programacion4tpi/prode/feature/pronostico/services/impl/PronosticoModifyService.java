@@ -1,7 +1,6 @@
 package com.programacion4tpi.prode.feature.pronostico.services.impl;
 
 import com.programacion4tpi.prode.exceptions.global.BadRequestException;
-import com.programacion4tpi.prode.exceptions.jwt.UnauthorizedException;
 import com.programacion4tpi.prode.feature.partido.models.Partido;
 import com.programacion4tpi.prode.feature.partido.services.domain.ValidatePartido;
 import com.programacion4tpi.prode.feature.pronostico.repository.IPronosticoRepository;
@@ -11,10 +10,8 @@ import com.programacion4tpi.prode.feature.pronostico.dtos.response.PronosticoRes
 import com.programacion4tpi.prode.feature.pronostico.models.Pronostico;
 import com.programacion4tpi.prode.feature.pronostico.services.impl.interfaces.IPronosticoModifyService;
 import com.programacion4tpi.prode.feature.usuario.models.Usuario;
-import com.programacion4tpi.prode.feature.usuario.services.domain.ValidateUser;
+import com.programacion4tpi.prode.feature.usuario.services.domain.interfaces.IValidateUser;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,23 +23,16 @@ import java.time.temporal.ChronoUnit;
 public class PronosticoModifyService implements IPronosticoModifyService {
 
     private final IPronosticoRepository repository;
-    private final ValidateUser validateUser;
     private final ValidatePartido validatePartido;
     private final PronosticoMapper mapper;
+    private final IValidateUser validateUser;
+
 
     @Override
     @Transactional
     public PronosticoResponseDto actualizarPronostico(PronosticoModifyRequestDto dto) {
 
-        // hacer esto más dry
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new UnauthorizedException("Usuario no autenticado");
-        }
-
-        String email = authentication.getName();
-        Usuario usuario = validateUser.validateUserByEmail(email);
+        Usuario usuario = validateUser.getAuthenticatedUserSession();
         Partido partido = validatePartido.validatePartidoById(dto.partidoId());
 
         Instant ahora = Instant.now();
