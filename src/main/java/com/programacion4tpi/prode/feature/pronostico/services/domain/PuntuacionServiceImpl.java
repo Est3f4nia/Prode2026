@@ -1,7 +1,7 @@
 package com.programacion4tpi.prode.feature.pronostico.services.domain;
 
 import com.programacion4tpi.prode.feature.partido.models.Partido;
-import com.programacion4tpi.prode.feature.partido.models.Partido.ResultadoPartido;
+import com.programacion4tpi.prode.feature.partido.models.enums.ResultadoPartido;
 import com.programacion4tpi.prode.feature.pronostico.models.Pronostico;
 import com.programacion4tpi.prode.feature.pronostico.repository.IPronosticoRepository;
 import com.programacion4tpi.prode.feature.pronostico.services.domain.interfaces.PuntuacionService;

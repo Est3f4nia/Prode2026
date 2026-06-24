@@ -12,6 +12,8 @@ import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoUpdateRequ
 import com.programacion4tpi.prode.feature.partido.dtos.response.PartidoResponseDto;
 import com.programacion4tpi.prode.feature.partido.mappers.PartidoMapper;
 import com.programacion4tpi.prode.feature.partido.models.Partido;
+import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
+import com.programacion4tpi.prode.feature.partido.models.enums.ResultadoPartido;
 import com.programacion4tpi.prode.feature.partido.repository.PartidoRepository;
 import com.programacion4tpi.prode.feature.partido.services.impl.intefaces.PartidoService;
 import com.programacion4tpi.prode.feature.pronostico.services.domain.interfaces.PuntuacionService;
@@ -68,7 +70,7 @@ public class PartidoServiceImpl implements PartidoService {
             existing.setFechaHoraInicio(dto.getFechaHoraInicio());
         }
         if (dto.getEstado() != null) {
-            existing.setEstado(Partido.EstadoPartido.valueOf(dto.getEstado()));
+            existing.setEstado(EstadoPartido.valueOf(dto.getEstado()));
         }
         if (dto.getGolesLocal() != null) {
             existing.setGolesLocal(dto.getGolesLocal());
@@ -77,7 +79,7 @@ public class PartidoServiceImpl implements PartidoService {
             existing.setGolesVisitante(dto.getGolesVisitante());
         }
         if (dto.getResultado() != null) {
-            existing.setResultado(Partido.ResultadoPartido.valueOf(dto.getResultado()));
+            existing.setResultado(ResultadoPartido.valueOf(dto.getResultado()));
         }
 
         return partidoMapper.toResponseDto(partidoRepository.save(existing));
@@ -132,7 +134,7 @@ public class PartidoServiceImpl implements PartidoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Partido no encontrado"));
 
         // AC: el partido debe estar EN_JUEGO
-        if (partido.getEstado() != Partido.EstadoPartido.EN_JUEGO) {
+        if (partido.getEstado() != EstadoPartido.EN_JUEGO) {
             throw new BadRequestException(
                     "Solo se puede cargar resultado de un partido en estado EN_JUEGO");
         }
@@ -141,13 +143,13 @@ public class PartidoServiceImpl implements PartidoService {
         partido.setGolesVisitante(dto.getGolesVisitante());
 
         // Derivar resultado automáticamente
-        Partido.ResultadoPartido resultado;
-        if (dto.getGolesLocal() > dto.getGolesVisitante())      resultado = Partido.ResultadoPartido.LOCAL;
-        else if (dto.getGolesLocal() < dto.getGolesVisitante()) resultado = Partido.ResultadoPartido.VISITANTE;
-        else                                                     resultado = Partido.ResultadoPartido.EMPATE;
+        ResultadoPartido resultado;
+        if (dto.getGolesLocal() > dto.getGolesVisitante()) resultado = ResultadoPartido.LOCAL;
+        else if (dto.getGolesLocal() < dto.getGolesVisitante()) resultado = ResultadoPartido.VISITANTE;
+        else resultado = ResultadoPartido.EMPATE;
 
         partido.setResultado(resultado);
-        partido.setEstado(Partido.EstadoPartido.FINALIZADO); // AC: estado → FINALIZADO
+        partido.setEstado(EstadoPartido.FINALIZADO); // AC: estado → FINALIZADO
 
         Partido saved = partidoRepository.save(partido);
 
