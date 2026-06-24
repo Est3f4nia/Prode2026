@@ -1,10 +1,13 @@
 package com.programacion4tpi.prode.feature.partido.dtos.response;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+
 import java.time.Instant;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PartidoResponseDto {
     private Long id;

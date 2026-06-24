@@ -1,10 +1,15 @@
 package com.programacion4tpi.prode.feature.partido.dtos.request;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import java.time.Instant;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PartidoUpdateRequestDto {
+
     private Long fechaId;
     private Long equipoLocalId;
     private Long equipoVisitanteId;

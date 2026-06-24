@@ -2,6 +2,8 @@ package com.programacion4tpi.prode.feature.partido.models;
 
 import com.programacion4tpi.prode.feature.equipo.models.Equipo;
 import com.programacion4tpi.prode.feature.fecha.models.Fecha;
+import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
+import com.programacion4tpi.prode.feature.partido.models.enums.ResultadoPartido;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.Instant;
@@ -44,11 +46,4 @@ public class Partido {
     @Enumerated(EnumType.STRING)
     private ResultadoPartido resultado;
 
-    public enum EstadoPartido {
-        POR_JUGARSE, EN_JUEGO, FINALIZADO
-    }
-
-    public enum ResultadoPartido {
-        LOCAL, EMPATE, VISITANTE
-    }
 }

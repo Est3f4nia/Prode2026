@@ -4,16 +4,15 @@ import com.programacion4tpi.prode.exceptions.fechas.FechaDuplicadaException;
 import com.programacion4tpi.prode.feature.fecha.dtos.request.FechaRequestDto;
 import com.programacion4tpi.prode.feature.fecha.dtos.response.FechaResponseDto;
 import com.programacion4tpi.prode.feature.fecha.models.enums.EstadoFecha;
-import com.programacion4tpi.prode.feature.fecha.models.enums.EstadoPartido;
 import com.programacion4tpi.prode.feature.fecha.models.Fecha;
 import com.programacion4tpi.prode.feature.fecha.repository.FechaRepository;
 import com.programacion4tpi.prode.feature.fecha.services.interfaces.FechaService;
-import lombok.AllArgsConstructor;
+import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +30,14 @@ public class FechaServiceImpl implements FechaService {
             );
         }
 
-        Fecha fecha = new Fecha(dto.getNombre());
+        Fecha fecha = Fecha.builder()
+                .nombre(dto.getNombre())
+                .estado(EstadoFecha.PROGRAMADA)
+                .build();
 
-        Fecha guardada = fechaRepository.save(fecha);
+        Fecha saved = fechaRepository.save(fecha);
 
-        return mapToResponse(guardada);
+        return mapToResponse(saved);
     }
 
     @Override
@@ -50,33 +52,21 @@ public class FechaServiceImpl implements FechaService {
 
     @Override
     @Transactional
-    public void actualizarEstadoFecha(
-            Fecha fecha,
-            List<EstadoPartido> estados
-    ) {
+    public void actualizarEstadoFecha(Fecha fecha, List<EstadoPartido> estados) {
+
+        EstadoFecha nuevoEstado;
 
         if (estados.isEmpty()) {
-            fecha.setEstado(EstadoFecha.PROGRAMADA);
-            return;
+            nuevoEstado = EstadoFecha.PROGRAMADA;
+        } else if (estados.contains(EstadoPartido.EN_JUEGO)) {
+            nuevoEstado = EstadoFecha.EN_JUEGO;
+        } else if (estados.stream().allMatch(EstadoPartido.FINALIZADO::equals)) {
+            nuevoEstado = EstadoFecha.FINALIZADA;
+        } else {
+            nuevoEstado = EstadoFecha.PROGRAMADA;
         }
 
-        boolean algunoEnJuego = estados.stream()
-                .anyMatch(e -> e == EstadoPartido.EN_JUEGO);
-
-        if (algunoEnJuego) {
-            fecha.setEstado(EstadoFecha.EN_JUEGO);
-            return;
-        }
-
-        boolean todosFinalizados = estados.stream()
-                .allMatch(e -> e == EstadoPartido.FINALIZADO);
-
-        if (todosFinalizados) {
-            fecha.setEstado(EstadoFecha.FINALIZADA);
-            return;
-        }
-
-        fecha.setEstado(EstadoFecha.PROGRAMADA);
+        fecha.setEstado(nuevoEstado);
     }
 
     private FechaResponseDto mapToResponse(Fecha fecha) {

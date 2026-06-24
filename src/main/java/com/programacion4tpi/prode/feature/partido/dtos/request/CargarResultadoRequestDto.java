@@ -2,9 +2,12 @@ package com.programacion4tpi.prode.feature.partido.dtos.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CargarResultadoRequestDto {
 
     @NotNull(message = "Los goles del equipo local son obligatorios.")
