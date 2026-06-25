@@ -7,7 +7,7 @@ import lombok.*;
 // linkear partidos?
 
 @Entity
-@Table(name = "fecha_jornada")
+@Table(name = "fecha")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Fecha {
 
