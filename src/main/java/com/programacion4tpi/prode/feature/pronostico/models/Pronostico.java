@@ -35,12 +35,16 @@ public class Pronostico {
     @Column(name = "puntos_otorgados")
     private Integer puntosOtorgados;
 
+    @Column(name = "puntos_calculados", nullable = false)
+    private boolean puntosCalculados = false;
+
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
     @PrePersist
     public void prePersist() {
         this.puntosOtorgados = 0;
+        this.puntosCalculados = false;
         this.fechaCreacion = LocalDateTime.now();
     }
 }
