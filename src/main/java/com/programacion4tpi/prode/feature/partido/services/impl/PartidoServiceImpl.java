@@ -11,6 +11,7 @@ import com.programacion4tpi.prode.feature.fecha.services.interfaces.IFechaServic
 import com.programacion4tpi.prode.feature.partido.dtos.request.CargarResultadoRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoCreateRequestDto;
 import com.programacion4tpi.prode.feature.partido.dtos.request.PartidoUpdateRequestDto;
+import com.programacion4tpi.prode.feature.partido.dtos.response.HistorialPartidoResponseDto;
 import com.programacion4tpi.prode.feature.partido.dtos.response.PartidoResponseDto;
 import com.programacion4tpi.prode.feature.partido.mappers.PartidoMapper;
 import com.programacion4tpi.prode.feature.partido.models.Partido;
@@ -108,7 +109,6 @@ public class PartidoServiceImpl implements PartidoService {
 
         Partido updated = partidoRepository.save(existing);
 
-        // Actualizar estado de la fecha automáticamente
         Fecha fechaActual = updated.getFecha();
         List<EstadoPartido> estados = partidoRepository.findByFechaId(fechaActual.getId())
                 .stream()
@@ -178,7 +178,6 @@ public class PartidoServiceImpl implements PartidoService {
         Partido saved = partidoRepository.save(partido);
         puntuacionService.calcularYAsignarPuntos(saved);
 
-        // Actualizar estado de la fecha automáticamente
         Fecha fechaActual = saved.getFecha();
         List<EstadoPartido> estados = partidoRepository.findByFechaId(fechaActual.getId())
                 .stream()
@@ -187,6 +186,28 @@ public class PartidoServiceImpl implements PartidoService {
         fechaService.actualizarEstadoFecha(fechaActual, estados);
 
         return partidoMapper.toResponseDto(saved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HistorialPartidoResponseDto> getHistorialByEquipo(Long equipoId) {
+
+        equipoRepository.findById(equipoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipo no encontrado"));
+
+        List<Partido> partidos = partidoRepository.findHistorialByEquipoId(equipoId);
+
+        return partidos.stream()
+                .map(p -> HistorialPartidoResponseDto.builder()
+                        .partidoId(p.getId())
+                        .equipoLocal(p.getEquipoLocal().getNombre())
+                        .equipoVisitante(p.getEquipoVisitante().getNombre())
+                        .golesLocal(p.getGolesLocal())
+                        .golesVisitante(p.getGolesVisitante())
+                        .resultado(p.getResultado())
+                        .fechaHoraInicio(p.getFechaHoraInicio())
+                        .build())
+                .toList();
     }
 
     // --- Helpers ---
@@ -206,7 +227,7 @@ public class PartidoServiceImpl implements PartidoService {
 
     // --- Tasks ---
 
-    @Scheduled(fixedRate = 10000) // 10 segundos
+    @Scheduled(fixedRate = 10000)
     @Transactional
     public void iniciarPartidos() {
         Instant ahora = Instant.now(clock);

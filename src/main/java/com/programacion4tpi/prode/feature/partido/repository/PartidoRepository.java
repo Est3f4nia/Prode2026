@@ -31,4 +31,12 @@ public interface PartidoRepository extends JpaRepository<Partido, Long> {
     );
 
     List<Partido> findByEstadoAndFechaHoraInicioLessThanEqual(EstadoPartido estadoPartido, Instant fechaHoraInicio);
+
+    @Query("""
+        SELECT p FROM Partido p
+        WHERE p.estado = 'FINALIZADO'
+        AND (p.equipoLocal.id = :equipoId OR p.equipoVisitante.id = :equipoId)
+        ORDER BY p.fechaHoraInicio DESC
+    """)
+    List<Partido> findHistorialByEquipoId(@Param("equipoId") Long equipoId);
 }
