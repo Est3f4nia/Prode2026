@@ -1,5 +1,9 @@
 package com.programacion4tpi.prode.feature.partido.models;
 
+import com.programacion4tpi.prode.feature.equipo.models.Equipo;
+import com.programacion4tpi.prode.feature.fecha.models.Fecha;
+import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
+import com.programacion4tpi.prode.feature.partido.models.enums.ResultadoPartido;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.Instant;
@@ -25,7 +29,6 @@ public class Partido {
     @JoinColumn(name = "equipo_visitante_id", nullable = false)
     private Equipo equipoVisitante;
 
-    // Utilizamos Instant para forzar y garantizar la persistencia en formato UTC
     @Column(name = "fecha_hora_inicio", nullable = false)
     private Instant fechaHoraInicio;
 
@@ -43,11 +46,4 @@ public class Partido {
     @Enumerated(EnumType.STRING)
     private ResultadoPartido resultado;
 
-    public enum EstadoPartido {
-        POR_JUGARSE, EN_JUEGO, FINALIZADO
-    }
-
-    public enum ResultadoPartido {
-        LOCAL, EMPATE, VISITANTE
-    }
 }

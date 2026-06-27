@@ -1,9 +1,13 @@
 package com.programacion4tpi.prode.feature.fecha.models;
 
+import com.programacion4tpi.prode.feature.fecha.models.enums.EstadoFecha;
 import jakarta.persistence.*;
+import lombok.*;
+
 
 @Entity
-@Table(name = "fecha_jornada")
+@Table(name = "fecha")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Fecha {
 
     @Id
@@ -17,35 +21,4 @@ public class Fecha {
     @Column(nullable = false)
     private EstadoFecha estado;
 
-    public Fecha() {
-    }
-
-    public Fecha(String nombre) {
-        this.nombre = nombre;
-        this.estado = EstadoFecha.PROGRAMADA;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public EstadoFecha getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoFecha estado) {
-        this.estado = estado;
-    }
 }

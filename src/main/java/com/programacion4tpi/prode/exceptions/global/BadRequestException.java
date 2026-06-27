@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import java.net.URI;
 import java.util.List;
 
+// tener en cuenta para las demás excepciones
+
 public class BadRequestException extends CustomException {
 
     public BadRequestException(String message) {

@@ -1,8 +1,13 @@
 package com.programacion4tpi.prode.exceptions.fechas;
 
-public class FechaDuplicadaException extends RuntimeException {
+import com.programacion4tpi.prode.exceptions.CustomException;
+import org.springframework.http.HttpStatus;
+import java.net.URI;
+
+
+public class FechaDuplicadaException extends CustomException {
 
     public FechaDuplicadaException(String message) {
-        super(message);
+        super(message, HttpStatus.BAD_REQUEST, null, URI.create("/errors/bad-request-fecha"), null);
     }
 }

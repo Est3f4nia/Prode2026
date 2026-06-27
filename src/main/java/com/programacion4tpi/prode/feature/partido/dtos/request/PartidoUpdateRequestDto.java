@@ -1,13 +1,33 @@
 package com.programacion4tpi.prode.feature.partido.dtos.request;
 
-import lombok.Data;
-import java.time.Instant;
+import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.*;
+import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PartidoUpdateRequestDto {
-    private Instant fechaHoraInicio;
-    private String estado; // POR_JUGARSE, EN_JUEGO, FINALIZADO
+
+    @Positive(message = "El ID de la fecha debe ser mayor a 0.")
+    private Long fechaId;
+
+    @Positive(message = "El ID del equipo debe ser mayor a 0.")
+    private Long equipoLocalId;
+
+    @Positive(message = "El ID del equipo debe ser mayor a 0.")
+    private Long equipoVisitanteId;
+
+    private LocalDateTime fechaHoraInicio;
+
+    private EstadoPartido estado;
+
+    @PositiveOrZero(message = "La cantidad de goles debe ser mayor o igual a 0.")
     private Integer golesLocal;
+
+    @PositiveOrZero(message = "La cantidad de goles debe ser mayor o igual a 0.")
     private Integer golesVisitante;
-    private String resultado; // LOCAL, EMPATE, VISITANTE
 }
