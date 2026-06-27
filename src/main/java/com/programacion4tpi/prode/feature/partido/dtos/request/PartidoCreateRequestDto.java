@@ -1,11 +1,12 @@
 package com.programacion4tpi.prode.feature.partido.dtos.request;
 
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,6 +27,6 @@ public class PartidoCreateRequestDto {
     private Long equipoVisitanteId;
 
     @NotNull(message = "La fecha y hora de inicio es obligatoria")
-    @Future(message = "La fecha de inicio debe ser futura.")
-    private Instant fechaHoraInicio;
+    @FutureOrPresent(message = "La fecha de inicio debe ser futura.")
+    private LocalDateTime fechaHoraInicio;
 }

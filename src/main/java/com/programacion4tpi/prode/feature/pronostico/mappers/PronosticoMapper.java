@@ -15,6 +15,7 @@ public class PronosticoMapper {
                 .partidoId(p.getPartido().getId())
                 .golesLocalPredicho(p.getGolesLocalPredicho())
                 .golesVisitantePredicho(p.getGolesVisitantePredicho())
+                .puntosOtorgados(p.getPuntosOtorgados())
                 .fechaCreacion(p.getFechaCreacion())
                 .build();
     }

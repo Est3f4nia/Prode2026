@@ -4,7 +4,7 @@ import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class PartidoUpdateRequestDto {
     @Positive(message = "El ID del equipo debe ser mayor a 0.")
     private Long equipoVisitanteId;
 
-    private Instant fechaHoraInicio;
+    private LocalDateTime fechaHoraInicio;
 
     private EstadoPartido estado;
 

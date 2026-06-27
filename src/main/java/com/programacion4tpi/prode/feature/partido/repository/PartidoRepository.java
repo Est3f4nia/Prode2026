@@ -1,10 +1,13 @@
 package com.programacion4tpi.prode.feature.partido.repository;
 
 import com.programacion4tpi.prode.feature.partido.models.Partido;
+import com.programacion4tpi.prode.feature.partido.models.enums.EstadoPartido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -26,4 +29,6 @@ public interface PartidoRepository extends JpaRepository<Partido, Long> {
             @Param("equipoLocalId") Long equipoLocalId,
             @Param("equipoVisitanteId") Long equipoVisitanteId
     );
+
+    List<Partido> findByEstadoAndFechaHoraInicioLessThanEqual(EstadoPartido estadoPartido, Instant fechaHoraInicio);
 }

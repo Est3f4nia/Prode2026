@@ -1,5 +1,6 @@
 package com.programacion4tpi.prode.feature.partido.services.impl;
 
+import com.programacion4tpi.prode.config.TimeConfig;
 import com.programacion4tpi.prode.exceptions.global.BadRequestException;
 import com.programacion4tpi.prode.exceptions.global.ResourceNotFoundException;
 import com.programacion4tpi.prode.feature.equipo.models.Equipo;
@@ -19,9 +20,13 @@ import com.programacion4tpi.prode.feature.partido.repository.PartidoRepository;
 import com.programacion4tpi.prode.feature.partido.services.impl.intefaces.PartidoService;
 import com.programacion4tpi.prode.feature.pronostico.services.domain.interfaces.PuntuacionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -35,6 +40,7 @@ public class PartidoServiceImpl implements PartidoService {
     private final PartidoMapper partidoMapper;
     private final PuntuacionService puntuacionService;
     private final IFechaService fechaService;
+    private final Clock clock;
 
     @Override
     @Transactional
@@ -69,21 +75,35 @@ public class PartidoServiceImpl implements PartidoService {
         }
 
         if (dto.getFechaHoraInicio() != null) {
-            existing.setFechaHoraInicio(dto.getFechaHoraInicio());
+
+            LocalDateTime localDateTime = dto.getFechaHoraInicio();
+
+            Instant inicio = localDateTime
+                    .atZone(TimeConfig.ZONE)
+                    .toInstant();
+
+            if (inicio.isBefore(Instant.now(clock))) {
+                throw new BadRequestException("La fecha de inicio debe ser futura.");
+            }
+
+            existing.setFechaHoraInicio(inicio);
         }
 
         if (dto.getEstado() != null) {
             existing.setEstado(dto.getEstado());
         }
 
-        if (dto.getGolesLocal() != null) {
-            existing.setGolesLocal(dto.getGolesLocal());
-            existing.setResultado(determinarResultado(dto.getGolesLocal(), dto.getGolesVisitante()));
-        }
+        if (dto.getGolesLocal() != null || dto.getGolesVisitante() != null) {
 
-        if (dto.getGolesVisitante() != null) {
-            existing.setGolesVisitante(dto.getGolesVisitante());
-            existing.setResultado(determinarResultado(dto.getGolesLocal(), dto.getGolesVisitante()));
+            Integer golesLocal = dto.getGolesLocal() != null
+                    ? dto.getGolesLocal()
+                    : existing.getGolesLocal();
+
+            Integer golesVisitante = dto.getGolesVisitante() != null
+                    ? dto.getGolesVisitante()
+                    : existing.getGolesVisitante();
+
+            existing.setResultado(determinarResultado(golesLocal, golesVisitante));
         }
 
         Partido updated = partidoRepository.save(existing);
@@ -118,6 +138,13 @@ public class PartidoServiceImpl implements PartidoService {
 
         Equipo visitante = equipoRepository.findById(dto.getEquipoVisitanteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Equipo visitante no encontrado"));
+
+        LocalDateTime localDateTime = dto.getFechaHoraInicio();
+        Instant inicio = localDateTime.atZone(TimeConfig.ZONE).toInstant();
+
+        if (inicio.isBefore(Instant.now(clock))) {
+            throw new BadRequestException("La fecha de inicio debe ser futura.");
+        }
 
         Partido partido = partidoMapper.toEntity(dto, fecha, local, visitante);
         return partidoMapper.toResponseDto(partidoRepository.save(partido));
@@ -162,6 +189,8 @@ public class PartidoServiceImpl implements PartidoService {
         return partidoMapper.toResponseDto(saved);
     }
 
+    // --- Helpers ---
+
     private ResultadoPartido determinarResultado(Integer golesLocal, Integer golesVisitante) {
         if (golesLocal > golesVisitante) return ResultadoPartido.LOCAL;
         if (golesLocal < golesVisitante) return ResultadoPartido.VISITANTE;
@@ -173,5 +202,21 @@ public class PartidoServiceImpl implements PartidoService {
             throw new BadRequestException(
                     "El equipo local y el equipo visitante no pueden ser el mismo.");
         }
+    }
+
+    // --- Tasks ---
+
+    @Scheduled(fixedRate = 10000) // 10 segundos
+    @Transactional
+    public void iniciarPartidos() {
+        Instant ahora = Instant.now(clock);
+
+        List<Partido> partidos = partidoRepository
+                .findByEstadoAndFechaHoraInicioLessThanEqual(
+                        EstadoPartido.POR_JUGARSE,
+                        ahora
+                );
+
+        partidos.forEach(p -> p.setEstado(EstadoPartido.EN_JUEGO));
     }
 }

@@ -6,33 +6,29 @@ import com.programacion4tpi.prode.feature.pronostico.models.Pronostico;
 import com.programacion4tpi.prode.feature.pronostico.repository.IPronosticoRepository;
 import com.programacion4tpi.prode.feature.pronostico.services.domain.interfaces.PuntuacionService;
 import com.programacion4tpi.prode.feature.usuario.models.Usuario;
-import com.programacion4tpi.prode.feature.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- *  DEBUGGEAR la garcha esta
- */
 
 @Service
 @RequiredArgsConstructor
 public class PuntuacionServiceImpl implements PuntuacionService {
 
     private final IPronosticoRepository pronosticoRepository;
-    private final UsuarioRepository usuarioRepository;
 
     @Override
     @Transactional
     public void calcularYAsignarPuntos(Partido partido) {
+        System.out.println("Entró a calcularYAsignarPuntos");
 
         List<Pronostico> pronosticos = pronosticoRepository.findByPartidoId(partido.getId());
 
         for (Pronostico pronostico : pronosticos) {
 
-            if (pronostico.getPuntosOtorgados() != null && pronostico.getPuntosOtorgados() > 0) {
+            if (pronostico.isPuntosCalculados()) {
                 continue;
             }
 
@@ -44,6 +40,7 @@ public class PuntuacionServiceImpl implements PuntuacionService {
             );
 
             pronostico.setPuntosOtorgados(puntos);
+            pronostico.setPuntosCalculados(true);
 
             Usuario usuario = pronostico.getUsuario();
             usuario.setPuntosTotales(usuario.getPuntosTotales() + puntos);
@@ -51,7 +48,6 @@ public class PuntuacionServiceImpl implements PuntuacionService {
             if (puntos == 3) {
                 usuario.setResultadosExactos(usuario.getResultadosExactos() + 1);
             }
-            usuarioRepository.save(usuario);
         }
     }
 
