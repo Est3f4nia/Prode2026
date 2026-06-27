@@ -24,7 +24,6 @@ public class PartidoMapper {
                 .equipoLocal(local)
                 .equipoVisitante(visitante)
                 .fechaHoraInicio(inicio)
-                // El estado 'POR_JUGARSE' se asigna automáticamente por el @Builder.Default en la entidad
                 .build();
     }
 
@@ -32,10 +31,17 @@ public class PartidoMapper {
         return PartidoResponseDto.builder()
                 .id(partido.getId())
                 .fechaNombre(partido.getFecha().getNombre())
+                .equipoLocalId(partido.getEquipoLocal().getId())
                 .equipoLocalNombre(partido.getEquipoLocal().getNombre())
+                .equipoLocalEscudo(partido.getEquipoLocal().getEscudoUrl())
+                .equipoVisitanteId(partido.getEquipoVisitante().getId())
                 .equipoVisitanteNombre(partido.getEquipoVisitante().getNombre())
+                .equipoVisitanteEscudo(partido.getEquipoVisitante().getEscudoUrl())
                 .fechaHoraInicio(partido.getFechaHoraInicio())
                 .estado(partido.getEstado().name())
+                .golesLocal(partido.getGolesLocal())
+                .golesVisitante(partido.getGolesVisitante())
+                .resultado(partido.getResultado() != null ? partido.getResultado().name() : null)
                 .build();
     }
 }
