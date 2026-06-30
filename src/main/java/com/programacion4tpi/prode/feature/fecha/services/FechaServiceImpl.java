@@ -61,7 +61,7 @@ public class FechaServiceImpl implements IFechaService {
         } else if (estados.contains(EstadoPartido.EN_JUEGO)) {
             nuevoEstado = EstadoFecha.EN_JUEGO;
         } else if (estados.stream().allMatch(EstadoPartido.FINALIZADO::equals)) {
-            nuevoEstado = EstadoFecha.FINALIZADO;
+            nuevoEstado = EstadoFecha.FINALIZADA;
         } else {
             nuevoEstado = EstadoFecha.PROGRAMADA;
         }

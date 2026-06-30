@@ -71,6 +71,7 @@ public class AuthService implements IAuthService {
             Usuario usuario = (Usuario) principal;
 
             return new AuthResponseDto(
+                    usuario.getId(),
                     accessToken,
                     refreshToken,
                     TOKEN_TYPE_BEARER,

@@ -4,5 +4,5 @@ public enum EstadoFecha {
 
     PROGRAMADA,
     EN_JUEGO,
-    FINALIZADO
+    FINALIZADA
 }

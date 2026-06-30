@@ -15,6 +15,8 @@ public interface PartidoRepository extends JpaRepository<Partido, Long> {
 
     List<Partido> findByFechaId(Long fechaId);
 
+    List<Partido> findAllByOrderByFechaHoraInicioDesc();
+
     @Query("""
         SELECT COUNT(p) > 0 FROM Partido p
         WHERE p.fecha.id = :fechaId

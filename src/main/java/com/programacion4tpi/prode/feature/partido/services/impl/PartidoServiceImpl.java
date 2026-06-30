@@ -153,7 +153,9 @@ public class PartidoServiceImpl implements PartidoService {
     @Override
     @Transactional(readOnly = true)
     public List<PartidoResponseDto> listar() {
-        return partidoRepository.findAll().stream()
+        List<Partido> partidos = partidoRepository.findAllByOrderByFechaHoraInicioDesc();
+        System.out.println("[DEBUG] Total partidos encontrados: " + partidos.size());
+        return partidos.stream()
                 .map(partidoMapper::toResponseDto)
                 .toList();
     }

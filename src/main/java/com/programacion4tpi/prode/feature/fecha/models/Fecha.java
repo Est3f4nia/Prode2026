@@ -6,7 +6,7 @@ import lombok.*;
 
 
 @Entity
-@Table(name = "fecha")
+@Table(name = "fecha_jornada")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Fecha {
 

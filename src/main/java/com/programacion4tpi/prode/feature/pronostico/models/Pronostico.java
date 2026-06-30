@@ -27,10 +27,10 @@ public class Pronostico {
     @JoinColumn(name = "partido_id", nullable = false)
     private Partido partido;
 
-    @Column(name = "goles_local_predicho", nullable = false)
+    @Column(name = "goles_local_pronosticado", nullable = false)
     private Integer golesLocalPredicho;
 
-    @Column(name = "goles_visitante_predicho", nullable = false)
+    @Column(name = "goles_visitante_pronosticado", nullable = false)
     private Integer golesVisitantePredicho;
 
     @Column(name = "puntos_otorgados")
