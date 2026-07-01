@@ -72,7 +72,7 @@ La API estará disponible en: `http://localhost:8080`
 
 ---
 
-## Endpoints principales (ejemplos)
+## Endpoints principales
 
 | Método | Endpoint                  | Descripción                  |
 |--------|---------------------------|------------------------------|
@@ -90,7 +90,7 @@ La API estará disponible en: `http://localhost:8080`
 ## Notas importantes
 
 - **Autenticación**: Se implementó **JWT stateless** almacenado en `localStorage` en el frontend (solución rápida para el TPI).
-- Seguridad: CORS configurado para aceptar peticiones del frontend.
+- **Seguridad:** CORS configurado para aceptar peticiones del frontend.
 - Manejo de errores centralizado con `@ControllerAdvice`.
 
 ---
